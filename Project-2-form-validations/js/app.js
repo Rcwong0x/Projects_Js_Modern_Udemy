@@ -1,5 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
     const inputEmail = document.querySelector("#email");
+    const inputCopy = document.querySelector("#copyc");
     const inputSubject = document.querySelector("#asunto");
     const inputMsg = document.querySelector("#mensaje");
     const form = document.querySelector("#formulario");
@@ -10,6 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const formSubmit = {
         email: "",
         subject: "",
+        copy: "",
         msg: "",
     };
 
@@ -19,7 +21,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const inputIsValid = isValid(event.target, true, true);
 
             formSubmit.email = event.target.value;
-            manageAlert(inputIsValid, inputContainer, "El email es invalido");
+            manageAlert(inputIsValid, inputContainer, "El email no es valido");
             enableButton();
         });
 
@@ -38,6 +40,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
             formSubmit.msg = event.target.value;
             manageAlert(inputIsValid, inputContainer);
+            enableButton();
+        });
+
+        inputCopy.addEventListener("input", event =>{
+            const inputContainer = event.target.parentElement;
+            let inputIsValid;
+
+            if (event.target.value === "") {
+                inputIsValid = true; // Debido a que es opcional
+            } else {
+                inputIsValid = isValid(event.target, false, true);
+            }
+
+            formSubmit.copy = event.target.value;
+            manageAlert(inputIsValid, inputContainer, "El email no es valido");
             enableButton();
         });
 
@@ -70,6 +87,8 @@ window.addEventListener("DOMContentLoaded", () => {
             }, 3000);
 
         });
+
+
     }
 
     setListeneres();

@@ -18,13 +18,13 @@ function setEventListeners() {
     cleanCart.addEventListener("click", event => {
         event.preventDefault();
         cart = [];
+        localStorage.setItem("cart", JSON.stringify(cart));
         cleanHtmlCart();
     });
 }
 
 function addToCart(event) {
     event.preventDefault();
-
     if (event.target.classList.contains("agregar-carrito")) {
         //Send the card of course
         const courseSelected = event.target.parentElement.parentElement;
@@ -47,6 +47,7 @@ function deleteCourse(idToDelete) {
     if (index !== -1){
         console.log("Eliminado: ", cart.splice(index, 1), "Nuevo cart: ", cart);
     }
+    localStorage.setItem("cart", JSON.stringify(cart));
     renderHtml();
 }
 
@@ -81,6 +82,7 @@ function readHtmlData(courseSelected) {
         cart = [...cart, infoCourseSelected];
     }
 
+    localStorage.setItem("cart", JSON.stringify(cart));
     renderHtml();
 }
 
@@ -93,8 +95,9 @@ function cleanHtmlCart() {
 function renderHtml() {
     cleanHtmlCart();
 
-    cart.forEach((course) => {
+    cart.forEach((course, index) => {
         const courseHTML = document.createElement("tr");
+        courseHTML.setAttribute("data-id", index);
         const { id, title, price, img, quantity } = course;
         courseHTML.innerHTML = `
                 <td><img src="${img}" style="width: 100px"></td>
@@ -110,4 +113,14 @@ function renderHtml() {
 
 }
 
-setEventListeners();
+function loadLocalStorage () {
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setEventListeners();
+    
+    loadLocalStorage();
+    
+    renderHtml();
+});
